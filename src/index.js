@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import state from "./Components/Redux/State";
+import {addPost} from "./Components/Redux/State";
+import {BrowserRouter} from "react-router-dom";
 
+
+addPost('My next post finally!')
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+    <App state={state} addPost={addPost}/>
+      </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

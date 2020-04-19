@@ -3,12 +3,14 @@ import s from './Profile.module.css';
 import MyPosts from "./My posts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 
-function Profile () {
+
+function Profile (props) {
+
   return (
       <div className={s.content}>
           <ProfileInfo/>
-          <MyPosts/>
-
+          <MyPosts postData={props.state.postData}
+          addPost={props.addPost}/>
       </div>
   );
 }

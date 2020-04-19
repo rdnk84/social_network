@@ -3,22 +3,26 @@ import s from './MyPosts.module.css';
 import Post from './Post/Post';
 
 function MyPosts(props) {
+    let newPostElement = React.createRef();
+    let addPost = () => {
+        let text = newPostElement.current.value;
+        props.addPost(text)
+    }
+
+    let postElements = props.postData.map (postDataElement => <Post message={postDataElement.message} likesCount={postDataElement.likesCount}/> );
     return (
         <div className={s.descriptionBlock}>
             <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea></textarea>
+                    <textarea ref={newPostElement}></textarea>
                 </div>
                 <div>
-                    <button>Add Post</button>
+                    <button onClick={addPost}>Add Post</button>
                 </div>
             </div>
             <div className={s.posts}>
-
-                <Post message='Hi, how are you?'/>
-                <Post message="It's my first post"/>
-                <Post message="It's my second post"/>
+                {postElements}
             </div>
         </div>
     );
