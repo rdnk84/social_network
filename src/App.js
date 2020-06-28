@@ -1,32 +1,39 @@
 import React from 'react';
 import './App.css';
-import Header from "./Components/Header/Header";
 import Navbar from "./Components/Navbar/Navbar";
-import Profile from "./Components/Profile/Profile";
-import Dialogs from "./Components/Dialogs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
+import DialogsContainer from "./Components/Dialogs/DialogsContainer";
+import UsersContainer from "./Components/Users/UsersContainer";
+import ProfileContainer from "./Components/Profile/ProfileContainer";
+import HeaderContainer from "./Components/Header/HeaderContainer";
+import LoginPage from "./Components/Login/Login";
 
 
-function App(props) {
+const App = (props) => {
 
     return (
-
-            <div className='app-wrapper'>
-                <Header/>
-                <Navbar/>
-                <div className='app-wrapper-content'>
-                    <Route  path='/Dialogs'
-                            render={() => <Dialogs state={props.state.dialogsPage}/>}/>
-                    <Route path='/Profile'
-                           render={() => <Profile
-                               state={props.state.profilePage}
-                               addPost={props.addPost} />}/>
-                    {/*<Dialogs/>*/}
-                    {/*<Profile/>*/}
-                </div>
+        <div className='app-wrapper'>
+            <HeaderContainer/>
+            <Navbar/>
+            <div className='app-wrapper-content'>
+                <Route path='/dialogs'
+                       render={() => <DialogsContainer/>}/>
+                <Route path='/profile/:userId?'
+                       render={() => <ProfileContainer
+                           // store={props.store}-потому что теперь мы Store берем из контекста. через Context provider-consumer
+                           // profilePage={props.state.profilePage} dispatch={props.dispatch}
+                       />}/>
+                {/*<Dialogs/>*/}
+                {/*<Profile/>*/}
+                <Route path='/users'
+                       render={() => <UsersContainer/>}/>
+                <Route path='/login'
+                       render={() => <LoginPage/>}/>
             </div>
+        </div>
 
     );
 }
 
+// app.PropTypes = { }
 export default App;

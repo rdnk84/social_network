@@ -1,0 +1,14 @@
+.bodyColor {
+    color: white;
+}
+.userPhoto {
+width: 100px;
+    height: 100px;
+    border: 1px solid cadetblue;
+}
+
+.selectedPage {
+    font-weight: bold;
+    font-size: 1.2em;
+
+}
