@@ -1,13 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {
-    follow,
-    followSuccess, getUsers, setCurrentPage,
-    toggleFollow, unfollow, unfollowSuccess
-} from '../../Redux/users-reducer';
+    follow, getUsers, setCurrentPage,
+    toggleFollow, unfollow} from '../../Redux/users-reducer';
 import Users from './Users';
 import Preloader from "../Common/Preloader/Preloader";
-import {usersAPI} from "../../api/api";
+
 
 
 class UsersContainer extends React.Component {
@@ -51,6 +49,7 @@ class UsersContainer extends React.Component {
                    follow={this.props.follow}
                    unfollow={this.props.unfollow}
                    toggleFollow={this.props.toggleFollow}
+                   followingInProgress={this.props.followingInProgress}
                    />
  {/*followingInProgress={this.props.followingInProgress} теперь не нужно передавать,тк это инкапсулировано*/}
  {/*в бизнес логике - в reducers           */}

@@ -2,6 +2,7 @@ import React from 'react';
 import {sendMessageCreator, updateNewMessageBodyCreator} from "../../Redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 // function DialogsContainer(props) {
 //
@@ -36,6 +37,8 @@ let mapStateToProps = (state) => {
 //стейта,которая нам нужна в данном конкретном случае
 //те она мапит Стейт и возвращает копию его части (мапит и возвращает-это то,что происходит
 //"под капотом", это делается в библиотеке Redux
+
+let AuthRedirectComponent = withAuthRedirect(Dialogs)
 
 let mapDispatchToProps = (dispatch) => {
     return {
