@@ -1,6 +1,9 @@
 import React from 'react';
 import s from './MyPosts.module.css';
 import Post from './Post/Post';
+import {Field, reduxForm} from "redux-form";
+import {maxLengthCreator, required} from "../../../utils/validators/validators";
+import {Textarea} from "../../Common/FormsControls/FormsControls";
 
 
 
@@ -12,39 +15,41 @@ const MyPosts = (props) => {
 
     let newPostElement = React.createRef();
 
-    let onAddPost = () => {
-        let text = newPostElement.current.value;
-       props.addPost(text);
-     };
+    let onAddPost = (values) => {
 
-    let onPostChange = () => {
-        let text = newPostElement.current.value;
-        props.updateNewPostText(text);
-    };
+       props.addPost(values.newPostText);
+
+     };
 
 
     return (
         <div className={s.descriptionBlock}>
             <h3>My posts</h3>
-            <div>
-                <div>
-                    <textarea
-                        ref={newPostElement}
-                        //обработчик событий onChange работает так: только пользователь вводит что-то в инпут
-                        //сразу же срабатывает. И поэтому мы можем сюда положить callback функцию, которая уже
-                        //сделает то,что нам нужно (в данный момент-изменит State)
-                        onChange={onPostChange}
-                        value={props.newPostText}/>
-                    <div>
-                        <button onClick={onAddPost}>Add Post</button>
-                    </div>
-                </div>
-                <div className={s.posts}>
-                    {postElements}
-                </div>
+            <AddNewPostFormRedux onSubmit={onAddPost}/>
+            <div className={s.posts}>
+                {postElements}
             </div>
         </div>
     );
 }
+const maxLength30 = maxLengthCreator(30);
+
+const AddNewPostForm = (props) => {
+    return (
+    <form onSubmit={props.handleSubmit}>
+        <div>
+            <Field component={Textarea} name="newPostText" placeholder="Type your message"
+                   validate={[required, maxLength30]}/>
+
+            <div>
+                <button>Add Post</button>
+            </div>
+        </div>
+
+    </form>
+    )
+}
+
+const AddNewPostFormRedux = reduxForm({form: "ProfileAddNewPostForm"})(AddNewPostForm)
 
 export default MyPosts;

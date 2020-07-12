@@ -40,11 +40,11 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToStore = (dispatch) => {
     return {
-        updateNewPostText: (text) => {
-            dispatch(updateNewPostTextCreator(text))
-        },
-        addPost: () => {
-            dispatch(addPostCreator())
+        // updateNewPostText: (text) => {
+        //     dispatch(updateNewPostTextCreator(text))
+        // },
+        addPost: (newPostText) => {
+            dispatch(addPostCreator(newPostText))
         }
     }
 }

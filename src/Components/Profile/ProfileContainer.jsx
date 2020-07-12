@@ -1,39 +1,45 @@
 import React from 'react';
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {getUserProfile} from "../../Redux/profile-reducer";
+import {getUserProfile, getUserStatus, setStatus, updateUserStatus} from "../../Redux/profile-reducer";
 import {Redirect, withRouter} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
         let userId = this.props.match.params.userId;
-//такой путь, потому что  с сервера идет такой ответ в виде объекта,у которого будт различные св-ва,
-//в числе которых св-во match  и у него еще будет св-во params - и туда мы уже вручную здесь
-//приписываем значение userId,чтобы связать path(который будет также ключом св-ва match с id определенного профайла
         if (!userId) {
-            userId = 2;
+            userId = this.props.authorizedUserId;
+            if(!userId) {
+                this.props.history.push("/login");
+            }
         }
-        this.props.getUserProfile(userId)
+        this.props.getUserProfile(userId);
+        this.props.getUserStatus(userId)
     }
 
     render() {
         return (
-            <Profile {...this.props} profile={this.props.profile}/>
+            <Profile {...this.props} profile={this.props.profile} status={this.props.status} updateStatus={this.props.updateUserStatus}/>
 // profile={this.props.profile}-вместо этой записи
         );
     }
 }
 
-let AuthRedirectComponent = withAuthRedirect (ProfileContainer);
-
 let mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
+    status: state.profilePage.status,
+    authorizedUserId: state.auth.userId,
     isAuth: state.auth.isAuth
-})
+   })
 
-let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
+export default compose (
+    connect(mapStateToProps, {getUserProfile, getUserStatus, updateUserStatus}),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer);
 
-export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerComponent);
+//см как было в DialogsContainer

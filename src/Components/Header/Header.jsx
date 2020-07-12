@@ -9,7 +9,8 @@ function Header(props) {
             <img src="https://png.pngtree.com/png-clipart/20190604/original/pngtree-borders-logo-png-image_1524188.jpg"
                  alt="logo"/>
             <div className={s.loginBlock}>
-                {props.isAuth ? props.login
+                {props.isAuth
+                    ? <div>{props.login} <button onClick={props.logout}>Log out</button></div>
                     : <NavLink to={'/Login'}>Login</NavLink>}
             </div>
         </header>

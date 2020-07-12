@@ -2,10 +2,18 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {
     follow, getUsers, setCurrentPage,
-    toggleFollow, unfollow} from '../../Redux/users-reducer';
+    toggleFollow, unfollow
+} from '../../Redux/users-reducer';
 import Users from './Users';
 import Preloader from "../Common/Preloader/Preloader";
-
+import {compose} from "redux";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {
+    currentPageSelector, followingInProgressSelector, isFetchingSelector,
+    pageSizeSelector,
+    totalUsersCountSelector,
+    usersSelector
+} from "../../Redux/users-selectors";
 
 
 class UsersContainer extends React.Component {
@@ -50,53 +58,42 @@ class UsersContainer extends React.Component {
                    unfollow={this.props.unfollow}
                    toggleFollow={this.props.toggleFollow}
                    followingInProgress={this.props.followingInProgress}
-                   />
- {/*followingInProgress={this.props.followingInProgress} теперь не нужно передавать,тк это инкапсулировано*/}
- {/*в бизнес логике - в reducers           */}
+            />
+            {/*followingInProgress={this.props.followingInProgress} теперь не нужно передавать,тк это инкапсулировано*/}
+            {/*в бизнес логике - в reducers           */}
 
         </>
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress
-    }
-//мы берем ту часть стейта,которая нам нужна и для удобства так ее и называем usersPage
-};
 
-// let mapDispatchToProps = (dispatch) => {
+// const mapStateToProps = (state) => {
 //     return {
-//         follow: (userID) => {
-//             dispatch(followAC(userID))
-//         },
-//         unfollow: (userID) => {
-//             dispatch(unfollowAC(userID));
-//         },
-//         setUsers: (users) => {
-//             dispatch(setUsersAC(users))
-//         },
-//         setCurrentPage: (pageNumber) => {
-//             dispatch(setCurrentPageAC(pageNumber))
-//         },
-//         setTotalUsersCount: (totalCount) => {
-//             dispatch(setTotalUsersCountAC(totalCount))
-//         },
-//         toggleIsFetching: (isFetching) => {
-//             dispatch (toggleIsFetchingAC(isFetching))
-//         }
+//         users: state.usersPage.users,
+//         pageSize: state.usersPage.pageSize,
+//         totalUsersCount: state.usersPage.totalUsersCount,
+//         currentPage: state.usersPage.currentPage,
+//         isFetching: state.usersPage.isFetching,
+//         followingInProgress: state.usersPage.followingInProgress
 //     }
-//
 // };
 
-export default connect(mapStateToProps,
-    {
-        follow, unfollow, setCurrentPage,   toggleFollow, getUsers})(UsersContainer);
+const mapStateToProps = (state) => {
+    return {
+        users: usersSelector(state),
+        pageSize: pageSizeSelector(state),
+        totalUsersCount: totalUsersCountSelector(state),
+        currentPage: currentPageSelector(state),
+        isFetching: isFetchingSelector(state),
+        followingInProgress: followingInProgressSelector(state)
+    }
+};
+
+export default compose(
+    connect(mapStateToProps,
+        {follow, unfollow, setCurrentPage, toggleFollow, getUsers}),
+    withAuthRedirect
+)(UsersContainer);
 //getUsers это на самом деле getUsersThunkCreator, мы переименовываем так просто для удобства чтения кода
 //и тк теперь мы действуем через thunkCreator у нас отпадает необходимость в таких методах как
 //setUsers, toggleIsFetching,setTotalUsersCount- тк они теперь сидят в  getUsersThunkCreator

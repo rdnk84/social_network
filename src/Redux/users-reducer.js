@@ -71,8 +71,7 @@ const usersReducer = (state = initialState, action) => {
             return state
     }
 };
-//здесь создаем и экспортируем экшены (все названия это Action Creator-просто мы опустили это название и оставили просто SetUsers,
-//setCurrentPage итд
+
 export const followSuccess = (userID) => ({type: FOLLOW, userID});
 export const unfollowSuccess = (userID) => ({type: UNFOLLOW, userID});
 export const setUsers = (users) => ({type: SET_USERS, users});
@@ -80,12 +79,10 @@ export const setCurrentPage = (currentPage) => ({type: SET_CURRENT_PAGE, current
 export const setTotalUsersCount = (totalCount) => ({type: SET_TOTAL_COUNT, totalCount});
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching});
 export const toggleFollow = (isFetching, userId) => ({type: TOGGLE_FOLLOW, isFetching, userId});
-//те вызов экшнкриэйтора создает action,который попадает в recucer и меняет стейт
 
 
-//а здесь создаем и экспортируем thunkCreators (все названия это thunkCreator-просто мы опустили это название и оставили просто
-// getUsers,setCurrentPage итд
-//а уже thunkCreators диспатчат нужные экшены
+
+
 export const getUsers = (currentPage, pageSize) => {
     return (dispatch) => {
         dispatch(toggleIsFetching(true));
@@ -99,7 +96,6 @@ export const getUsers = (currentPage, pageSize) => {
 export const follow = (userId) => {
     return (dispatch) => {
         dispatch(toggleFollow(true, userId));
-//те когда мы диспатчим вызов экшнкриэйтора мы получается запускаем его, и создается action, к
         usersAPI.follow(userId)
             //здесь тоже все идет из api.js
             .then(response => {
@@ -109,19 +105,13 @@ export const follow = (userId) => {
                 dispatch(toggleFollow(false, userId))
             });
     }
-}
+};
 
 export const unfollow = (userId) => {
     return (dispatch) => {
         dispatch(toggleFollow(true, userId));
         usersAPI.unfollow(userId)
-            //теперь всё,что закомментировано-идет из api.js
-            // axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,{
-            //     withCredentials: true,
-            //     headers: {
-            //         "API-KEY": "be431cd4-99e3-421a-806a-cbb8bef57298"
-            //     }
-            // })
+
             .then(response => {
                 if (response.data.resultCode === 0) {
                     dispatch(unfollowSuccess(userId));
@@ -129,5 +119,7 @@ export const unfollow = (userId) => {
                 dispatch(toggleFollow(false, userId))
             })
     }
-}
+};
+
+
 export default usersReducer;

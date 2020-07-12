@@ -3,6 +3,7 @@ import {sendMessageCreator, updateNewMessageBodyCreator} from "../../Redux/dialo
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
+import {compose} from "redux";
 
 // function DialogsContainer(props) {
 //
@@ -26,37 +27,22 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 //     );
 // }
 let mapStateToProps = (state) => {
-//сюда мы забираем ту часть стейта, которая нам нужна в этой компоненте
     return {
         dialogsPage: state.dialogsPage,
         newMessageBody: state.newMessageBody,
         isAuth: state.auth.isAuth
     }
 }
-//те эта функция берет весь State(это входящий параметр у нее),а возвращает только ту часть
-//стейта,которая нам нужна в данном конкретном случае
-//те она мапит Стейт и возвращает копию его части (мапит и возвращает-это то,что происходит
-//"под капотом", это делается в библиотеке Redux
 
-let AuthRedirectComponent = withAuthRedirect(Dialogs)
+// let AuthRedirectComponent = withAuthRedirect(Dialogs)
 
 let mapDispatchToProps = (dispatch) => {
     return {
-        updateNewMessageChange: (body) => {
-            debugger
-            dispatch(updateNewMessageBodyCreator(body));
+        sendMessage: (newMessageBody) => {
+            dispatch(sendMessageCreator(newMessageBody))
         },
-        sendMessage: () => {
-            dispatch(sendMessageCreator())
-        }
     }
 }
-//dispatch параметром в эту функцию(mapDispatchToProps)вкладывает также библиотека Redux
-//"под каптотом"
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
-//connect возвращает нам контейнерную компоненту по сути (которую я закомментила выше)
-//те отрисовывает чистую компоненту Dialogs, и пропсами в нее передает нужную ей часть стейта
-//и нужные колбеки
-
-export default DialogsContainer;
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps), withAuthRedirect)(Dialogs);

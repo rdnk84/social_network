@@ -9,7 +9,7 @@ function Profile (props) {
     if (!props.isAuth) return <Redirect to={'/login'}/>
   return (
       <div className={s.content}>
-          <ProfileInfo profile={props.profile}/>
+          <ProfileInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
           <MyPostsContainer
              // store={props.store}-store берем теперь через Context
               // postData={props.profilePage.postData}
