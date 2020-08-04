@@ -1,49 +1,26 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {
-    follow, getUsers, setCurrentPage,
-    toggleFollow, unfollow
-} from '../../Redux/users-reducer';
+    follow, requestUsers, setCurrentPage,
+    toggleFollow, unfollow} from '../../Redux/users-reducer';
 import Users from './Users';
 import Preloader from "../Common/Preloader/Preloader";
 import {compose} from "redux";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {
-    currentPageSelector, followingInProgressSelector, isFetchingSelector,
-    pageSizeSelector,
-    totalUsersCountSelector,
-    usersSelector
+    currentPageSelector, followingInProgressSelector, getUsersSelector, isFetchingSelector,
+    pageSizeSelector, totalUsersCountSelector, usersSelector
 } from "../../Redux/users-selectors";
 
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.getUsers(this.props.currentPage, this.props.pageSize);
-
-//так было пока мы не создали thunkCreator
-//         this.props.toggleIsFetching(true);
-//         usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-// //теперь вместо response -> data,потому что сам response сидит теперь в api.js, а здесь компонента получает только
-// //нужные данные
-//             this.props.toggleIsFetching(false);
-//             this.props.setUsers(data.items);
-//             this.props.setTotalUsersCount(data.totalCount);
-//
-//         });
+        this.props.requestUsers(this.props.currentPage, this.props.pageSize);
     }
 
     onPageChanged = (pageNumber) => {
-        this.props.getUsers(pageNumber, this.props.pageSize);
-//         this.props.setCurrentPage(pageNumber);
-//         this.props.toggleIsFetching(true);
-// //pageNumber мы берем потому что State еще не обновился и актуального значения здесь еще не будет,если мы поставим
-//         //this.props.currentPage
-//         usersAPI.getUsers(pageNumber, this.props.pageSize)
-//             .then(data => {
-//                 this.props.toggleIsFetching(false);
-//                 this.props.setUsers(data.items);
-//             });
+        this.props.requestUsers(pageNumber, this.props.pageSize);
     }
 
     render() {
@@ -59,14 +36,11 @@ class UsersContainer extends React.Component {
                    toggleFollow={this.props.toggleFollow}
                    followingInProgress={this.props.followingInProgress}
             />
-            {/*followingInProgress={this.props.followingInProgress} теперь не нужно передавать,тк это инкапсулировано*/}
-            {/*в бизнес логике - в reducers           */}
-
         </>
     }
 }
 
-
+//до селекторов
 // const mapStateToProps = (state) => {
 //     return {
 //         users: state.usersPage.users,
@@ -80,7 +54,7 @@ class UsersContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        users: usersSelector(state),
+        users: getUsersSelector(state),
         pageSize: pageSizeSelector(state),
         totalUsersCount: totalUsersCountSelector(state),
         currentPage: currentPageSelector(state),
@@ -91,9 +65,6 @@ const mapStateToProps = (state) => {
 
 export default compose(
     connect(mapStateToProps,
-        {follow, unfollow, setCurrentPage, toggleFollow, getUsers}),
+        {follow, unfollow, setCurrentPage, toggleFollow, requestUsers}),
     withAuthRedirect
 )(UsersContainer);
-//getUsers это на самом деле getUsersThunkCreator, мы переименовываем так просто для удобства чтения кода
-//и тк теперь мы действуем через thunkCreator у нас отпадает необходимость в таких методах как
-//setUsers, toggleIsFetching,setTotalUsersCount- тк они теперь сидят в  getUsersThunkCreator
