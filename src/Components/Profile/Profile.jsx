@@ -5,19 +5,15 @@ import MyPostsContainer from "./My posts/MyPostsContainer";
 import {Redirect} from "react-router-dom";
 
 
-function Profile (props) {
+function Profile(props) {
     if (!props.isAuth) return <Redirect to={'/login'}/>
-  return (
-      <div className={s.content}>
-          <ProfileInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
-          <MyPostsContainer
-             // store={props.store}-store берем теперь через Context
-              // postData={props.profilePage.postData}
-              // newPostText={props.profilePage.newPostText}
-              // dispatch={props.dispatch}
-          />
-      </div>
-  );
+    return (
+        <div className={s.content}>
+            <ProfileInfo profile={props.profile} status={props.status} updateStatus={props.updateStatus}/>
+            <MyPostsContainer
+            />
+        </div>
+    );
 }
 
 export default Profile;

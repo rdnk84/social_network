@@ -1,32 +1,30 @@
 import React from 'react';
 import {Field, reduxForm} from "redux-form";
-import {Input} from "../Common/FormsControls/FormsControls";
+import {fieldCreator, Input} from "../Common/FormsControls/FormsControls";
 import {maxLengthCreator, required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
 import {login} from "../../Redux/auth-reducer";
 import {Redirect} from "react-router-dom";
 import styles from "./../Common/FormsControls/FormsControls.module.css"
 
-const maxLength10 = maxLengthCreator(30)
-const LoginForm = (props) => {
+const maxLength10 = maxLengthCreator(10)
+
+const LoginForm = ({handleSubmit, error}) => {
     //в пропсы сюда приходит благодаря контейнерной компоненте, обернутой в reduxForm много разных св-в,
     //ключевое из них это handleSubmit
+    //а error - это это поле уже "зашито" в redux-form изначально
     return (
-        <form onSubmit={props.handleSubmit}>
+
+        <form onSubmit={handleSubmit}>
             {/*//в handleSubmit происходит следующее: e.preventDefault, собираются все данные с формы и упаковываются в объект*/}
             {/*//и вызывается метод onSubmit, который отправляет эти данные и меняет State        */}
-            <div>
-                <Field placeholder={"Email"} name={"email"}
-                       validate={[required, maxLength10]} component={Input}/>
-            </div>
-            <div>
-                <Field placeholder={"Password"} name={"password"} type={"password"}
-                       validate={[required, maxLength10]} component={Input}/>
-            </div>
-            <div>
-                <Field component={"input"} name={"rememberMe"} type={"checkbox"}/>remember me
-            </div>
-           {props.error ? <div className={styles.formSummaryError}>ERROR</div> : ""}
+                {fieldCreator("Email", "email", [required, maxLength10], Input)}
+                {/*<Field placeholder={"Email"} name={"email"}*/}
+                {/*       validate={[required, maxLength10]} component={Input}/>*/}
+                {fieldCreator("Password", "password", [required, maxLength10], Input, {type:"password"})}
+                {fieldCreator(null, "rememberMe", [], Input, {type:"checkbox"}, "remember me")}
+
+           {error ? <div className={styles.formSummaryError}>ERROR</div> : ""}
             <div>
                 <button>Login</button>
             </div>

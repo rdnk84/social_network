@@ -2,8 +2,6 @@ import profileReducer from "./profile-reducer";
 import dialogsReducer from "./dialogs-reducer";
 import sidebarReducer from "./sidebar-reducer";
 
-
-
 let store = {
     _state: {
         profilePage: {
@@ -49,24 +47,6 @@ let store = {
         this._state._callSubscriber = observer;
     },
 
-  //а так мы меняли State до появления экшенов (action)
-    // addPost() {
-    //     let newPost = {
-    //         id: 7,
-    //         message: this._state.profilePage.newPostText,-здесь при клике на кнопку в компоненте меняется занчение message
-    //         likesCount: 0
-    //     };
-    //     this._state.profilePage.postData.push(newPost);
-    //     this._state.profilePage.newPostText = '';
-    //     this._state._callSubscriber(this._state);
-    // },
-    // updateNewPostText(newText) {
-    //     this._state.profilePage.newPostText = newText;
-    //     this._state._callSubscriber(this._state);
-    // },
- //newText здесь - это значение,которое прилетает из callback из внешней компоненты (из MyPosts)
- // из textarea
-
     dispatch(action) {
  //те здесь profileReducer включает в себя ту часть State, которая является profilePage в стэйте
         this._state.profilePage = profileReducer(this._state.profilePage, action);
@@ -75,28 +55,7 @@ let store = {
         this._state.sidebar = sidebarReducer(this._state.sidebar, action);
         this._state._callSubscriber(this._state);
 
-//до редьюсеров экшены создавались так:
-        // if (action.type === ADD_POST) {
-        //     let newPost = {
-        //         id: 7,
-        //         message: this._state.profilePage.newPostText,
-        //         likesCount: 0
-        //     };
-        //     this._state.profilePage.postData.push(newPost);
-        //     this._state.profilePage.newPostText = '';
-        //     this._state._callSubscriber(this._state);
-        // } else if (action.type === UPDATE_NEW_POST_TEXT) {
-        //     this._state.profilePage.newPostText = action.newText;
-        //     this._state._callSubscriber(this._state);
-        // } else if (action.type === UPDATE_NEW_MESSAGE_BODY) {
-        //     this._state.dialogsPage.newMessageBody = action.body;
-        //     this._state._callSubscriber(this._state);
-        // } else if (action.type === SEND_MESSAGE) {
-        //     let body = this._state.dialogsPage.newMessageBody;
-        //     this._state.dialogsPage.newMessageBody = '';
-        //     this._state.dialogsPage.messagesData.push({id: 6, message: body})
-        //     this._state._callSubscriber(this._state);
-        // }
+
 
     }
 };

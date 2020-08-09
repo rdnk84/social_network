@@ -1,6 +1,6 @@
 import {profileAPI, usersAPI} from "../api/api";
+
 const ADD_POST = 'ADD-POST';
-// const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 
@@ -30,7 +30,6 @@ const profileReducer = (state = initialState, action) => {
                 postData: [...state.postData, newPost],
                 newPostText: ''
             }
-
         }
 
         case SET_USER_PROFILE: {
@@ -45,29 +44,22 @@ const profileReducer = (state = initialState, action) => {
 
 };
 export const addPostCreator = (newPostText) => ({type: 'ADD-POST', newPostText});
-
 export const setUserProfile = (profile) => ({type: 'SET_USER_PROFILE', profile})
 export const setStatus = (status) => ({type: 'SET_STATUS', status})
 
 //Thunks
-export const getUserProfile = (userId) => (dispatch) => {
-    usersAPI.getProfile(userId).then(response => {
+export const getUserProfile = (userId) => async (dispatch) => {
+    let response = await usersAPI.getProfile(userId)
         dispatch(setUserProfile(response.data));
-    });
 }
-export const getUserStatus = (userId) => (dispatch) => {
-    profileAPI.getStatus(userId).then(response => {
+export const getUserStatus = (userId) => async (dispatch) => {
+    let response = await profileAPI.getStatus(userId)
             dispatch(setStatus(response.data))
-        }
-    )
 }
-export const updateUserStatus = (status) => (dispatch) => {
 
-    profileAPI.updateStatus(status).then(response => {
-
+export const updateUserStatus = (status) => async (dispatch) => {
+    let response = await profileAPI.updateStatus(status)
             if (response.data.resultCode === 0)
                 dispatch(setStatus(status))
-        }
-    )
 }
 export default profileReducer;
