@@ -4,7 +4,6 @@ import noPhoto from "../../assets/Img/noPhoto.png";
 import {NavLink} from "react-router-dom";
 
 
-
 let User = ({user, followingInProgress, unfollow, follow}) => {
 
     return <div className={s.bodyColor}>
